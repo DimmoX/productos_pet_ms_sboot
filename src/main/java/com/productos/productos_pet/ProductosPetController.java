@@ -49,12 +49,13 @@ public class ProductosPetController {
      * @return {Object} Envio con el id especificado
      */
     @GetMapping(path = "/envios/{id}")
-    public List<Envios> getEnvioById(@PathVariable int id) {
+    public Envios getEnvioById(@PathVariable int id) {
         for(Envios envio: envios){
             if(envio.getIdEnvio() == id){
                 return envio;
             }
         }
+        return null;
     }
     
     /**
