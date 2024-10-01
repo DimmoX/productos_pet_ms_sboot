@@ -2,9 +2,12 @@ package com.productos.productos_pet.model;
 
 import java.time.LocalDate;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.productos.productos_pet.model.enums.StatusEnvioEnum;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,6 +15,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -19,7 +23,7 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "envio_productos")
-public class EnviosModel {
+public class EnviosModel extends RepresentationModel<EnviosModel>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     
@@ -42,6 +46,9 @@ public class EnviosModel {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @Pattern(regexp = "^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-[0-9]{4}$", message = "La fecha debe tener el formato MM-DD-YYYY")
     private LocalDate fechaEstimadaEntrega;
+
+    @OneToOne(mappedBy = "idEnvio", cascade = CascadeType.ALL)
+    private SeguimientoModel seguimiento;
 
     // Getters y Setters
     public Long getId() {
