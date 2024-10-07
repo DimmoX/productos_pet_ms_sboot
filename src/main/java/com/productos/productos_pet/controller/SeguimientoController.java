@@ -98,21 +98,22 @@ public class SeguimientoController {
         seguimiento.setFechaUltimaActualizacion(LocalDate.parse(seguimientoDTO.getFechaUltimaActualizacion(), DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         seguimiento.setIdEnvio(envio);
 
-        seguimientoRepository.save(seguimiento);
+        // Guardar el seguimiento y capturar el objeto guardado
+        SeguimientoModel savedSeguimiento = seguimientoService.createSeguimiento(seguimientoDTO);
 
         // Crear el modelo de entidad con enlaces HATEOAS
-        EntityModel<SeguimientoModel> entityModel = EntityModel.of(seguimiento,
+        EntityModel<SeguimientoModel> entityModel = EntityModel.of(savedSeguimiento,
             // Enlace a sí mismo (al detalle del seguimiento)
-            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SeguimientoController.class).getSeguimientoById(seguimiento.getId())).withSelfRel(),
+            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SeguimientoController.class).getSeguimientoById(savedSeguimiento.getId())).withSelfRel(),
+            // Enlace a la lista de Seguimientos
+            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SeguimientoController.class).getSeguimientos()).withRel("seguimientos"),
             // Enlace al envío relacionado
             WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EnviosController.class).getEnvioById(envio.getId())).withRel("envio"),
             // Enlace a la lista de Envios
-            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EnviosController.class).getEnvios()).withRel("envios"),
-            // Enlace a la lista de Seguimientos
-            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SeguimientoController.class).getSeguimientos()).withRel("seguimientos")
+            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EnviosController.class).getEnvios()).withRel("envios")
         );
 
-        logger.info("POST: /seg -> Se creó un nuevo seguimiento con ID: {}", seguimiento.getId());
+        logger.info("POST: /seg -> Se creó un nuevo seguimiento con ID: {}", savedSeguimiento.getId());
 
         // Retornar la respuesta con el seguimiento y los enlaces
         return ResponseEntity.ok(entityModel);
