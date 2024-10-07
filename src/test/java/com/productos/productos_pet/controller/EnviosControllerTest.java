@@ -15,15 +15,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.productos.productos_pet.model.EnviosModel;
 import com.productos.productos_pet.model.enums.StatusEnvioEnum;
@@ -32,10 +29,6 @@ import com.productos.productos_pet.service.envios.EnviosService;
 @WebMvcTest(EnviosController.class)
 public class EnviosControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    // Usa @MockBean para crear un mock del servicio
     @MockBean
     private EnviosService enviosService;
 
@@ -45,7 +38,6 @@ public class EnviosControllerTest {
     @BeforeEach
     void configuracionInicial() {
         MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(enviosController).build();
     }
 
     @AfterEach
