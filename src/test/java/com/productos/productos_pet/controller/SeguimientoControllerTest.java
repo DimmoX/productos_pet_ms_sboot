@@ -18,14 +18,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MockMvc;
 
 import com.productos.productos_pet.dto.SeguimientoDTO;
 import com.productos.productos_pet.model.EnviosModel;
@@ -38,8 +36,6 @@ import com.productos.productos_pet.service.seguimientos.SeguimientoService;
 @WebMvcTest(SeguimientoController.class)
 public class SeguimientoControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;  // Simula la interacción con los endpoints
 
     @InjectMocks
     private SeguimientoController seguimientoController;  // Inyecta los mocks en el controlador
@@ -53,7 +49,6 @@ public class SeguimientoControllerTest {
     @MockBean
     private SeguimientoRepository seguimientoRepositoryMock;  // Simula el repositorio de seguimientos
 
-    private Long seguimientoId;
     private Long envioId;
     private SeguimientoModel seguimiento;
     private EnviosModel envio;
@@ -64,8 +59,7 @@ public class SeguimientoControllerTest {
     void configuracionInicial() {
         MockitoAnnotations.openMocks(this);
 
-        // IDs de prueba
-        seguimientoId = 1L;
+        // ID de prueba
         envioId = 5L;
         
         formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -92,8 +86,6 @@ public class SeguimientoControllerTest {
     void limpiarRecursos()  {
         Mockito.reset(seguimientoRepositoryMock, enviosRepositoryMock);
 
-
-        seguimientoId = null;
         envio = null;
         seguimientoDTO = null;
     }
